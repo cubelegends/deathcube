@@ -1,0 +1,14 @@
+name: DeathCube
+version: 3.0.0-SNAPSHOT
+description: DeathCube v3.0.0-SNAPSHOT
+author: baba43
+website: http://www.bukkit.org/
+
+main: me.baba43.deathcube.DeathCubeManager
+
+softdepend: [ 'Multiverse-Core' ]
+
+commands:
+  dc:
+    description: Deathcube Commands
+    usage: /dc help
