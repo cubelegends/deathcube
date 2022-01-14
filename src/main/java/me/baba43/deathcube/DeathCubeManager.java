@@ -1,6 +1,7 @@
 package me.baba43.deathcube;
 
 import org.bukkit.*;
+import org.bukkit.block.data.Lightable;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -529,7 +530,7 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
                 p.sendMessage(this.lang.get("hasActivePotion"));
                 return false;
             }
-            if (p.getInventory().contains(91)) {
+            if (p.getInventory().contains(Material.JACK_O_LANTERN)) {
                 sender.sendMessage(this.lang.get("hasJackos"));
                 return false;
             }
@@ -691,10 +692,10 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
                     loc3.add(0.0D, 1.0D, 0.0D);
                     boolean hasSpace = true;
                     for (int x = 0; x < 5; x++) {
-                        if (loc2.getBlock().getTypeId() != 0) {
+                        if (loc2.getBlock().getType() != Material.AIR) {
                             hasSpace = false;
                         }
-                        if (loc3.getBlock().getTypeId() != 0) {
+                        if (loc3.getBlock().getType() != Material.AIR) {
                             hasSpace = false;
                         }
                         loc2.add(vector);
@@ -708,14 +709,14 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
                         this.config.set("cubes." + dc.getName() + ".locations.blockbar.vx", Integer.valueOf(vector.getBlockX()));
                         this.config.set("cubes." + dc.getName() + ".locations.blockbar.vz", Integer.valueOf(vector.getBlockZ()));
                         p.setNoDamageTicks(80);
-                        loc.getBlock().setTypeId(20);
-                        loc.clone().add(0.0D, 1.0D, 0.0D).getBlock().setTypeIdAndData(35, (byte) 8, true);
-                        loc.add(vector).getBlock().setTypeIdAndData(35, (byte) 14, true);
-                        loc.clone().add(0.0D, 1.0D, 0.0D).getBlock().setTypeIdAndData(35, (byte) 14, true);
-                        loc.add(vector).getBlock().setTypeIdAndData(35, (byte) 4, true);
-                        loc.clone().add(0.0D, 1.0D, 0.0D).getBlock().setTypeIdAndData(35, (byte) 4, true);
-                        loc.add(vector).getBlock().setTypeIdAndData(35, (byte) 11, true);
-                        loc.clone().add(0.0D, 1.0D, 0.0D).getBlock().setTypeIdAndData(35, (byte) 11, true);
+                        loc.getBlock().setType(Material.GLASS);
+                        loc.clone().add(0.0D, 1.0D, 0.0D).getBlock().setType(Material.LIGHT_GRAY_WOOL);
+                        loc.add(vector).getBlock().setType(Material.RED_WOOL);
+                        loc.clone().add(0.0D, 1.0D, 0.0D).getBlock().setType(Material.RED_WOOL);
+                        loc.add(vector).getBlock().setType(Material.YELLOW_WOOL);
+                        loc.clone().add(0.0D, 1.0D, 0.0D).getBlock().setType(Material.YELLOW_WOOL);
+                        loc.add(vector).getBlock().setType(Material.BLUE_WOOL);
+                        loc.clone().add(0.0D, 1.0D, 0.0D).getBlock().setType(Material.BLUE_WOOL);
                         this.saveConfig();
                         this.loadConfig(dc);
                         p.sendMessage(ChatColor.GRAY + "BlockBar created successfully!");
@@ -1018,15 +1019,15 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
                     for (int i = minX; i < maxX + 1; i++) {
                         for (int j = minZ; j < maxZ + 1; j++) {
                             if (var17 < 1) {
-                                w.getBlockAt(i, var17, j).setTypeId(7);
+                                w.getBlockAt(i, var17, j).setType(Material.BEDROCK);
                             } else if (var17 == 1) {
                                 if (this.random(0, 2) == 2) {
-                                    w.getBlockAt(i, var17, j).setTypeId(11);
+                                    w.getBlockAt(i, var17, j).setType(Material.LAVA);
                                 } else {
-                                    w.getBlockAt(i, var17, j).setTypeId(0);
+                                    w.getBlockAt(i, var17, j).setType(Material.AIR);
                                 }
                             } else {
-                                w.getBlockAt(i, var17, j).setTypeId(0);
+                                w.getBlockAt(i, var17, j).setType(Material.AIR);
                             }
                         }
                     }
@@ -1034,24 +1035,24 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
                 for (var17 = 4; var17 < surface; var17++) {
                     int i;
                     for (i = minX; i < maxX + 1; i++) {
-                        w.getBlockAt(i, var17, minZ).setTypeId(1);
-                        w.getBlockAt(i, var17, maxZ).setTypeId(1);
+                        w.getBlockAt(i, var17, minZ).setType(Material.STONE);
+                        w.getBlockAt(i, var17, maxZ).setType(Material.STONE);
                     }
                     for (i = minZ; i < maxZ + 1; i++) {
-                        w.getBlockAt(minX, var17, i).setTypeId(1);
-                        w.getBlockAt(maxX, var17, i).setTypeId(1);
+                        w.getBlockAt(minX, var17, i).setType(Material.STONE);
+                        w.getBlockAt(maxX, var17, i).setType(Material.STONE);
                     }
                 }
                 final byte var19 = 4;
                 for (int var18 = 1; var18 <= var19; var18++) {
                     int i;
                     for (i = minX; i < maxX + 1; i++) {
-                        w.getBlockAt(i, var18, minZ).setTypeId(7);
-                        w.getBlockAt(i, var18, maxZ).setTypeId(7);
+                        w.getBlockAt(i, var18, minZ).setType(Material.BEDROCK);
+                        w.getBlockAt(i, var18, maxZ).setType(Material.BEDROCK);
                     }
                     for (i = minZ; i < maxZ + 1; i++) {
-                        w.getBlockAt(minX, var18, i).setTypeId(7);
-                        w.getBlockAt(maxX, var18, i).setTypeId(7);
+                        w.getBlockAt(minX, var18, i).setType(Material.BEDROCK);
+                        w.getBlockAt(maxX, var18, i).setType(Material.BEDROCK);
                     }
                 }
                 minZ++;
@@ -1260,7 +1261,7 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
             if (dc.hasCorrectLocation && dc.contains(loc, 1)) {
                 if (dc.contains(loc, -9)) {
                     final Item item = event.getItem();
-                    if (item.getItemStack().getTypeId() != 91) {
+                    if (item.getItemStack().getType() != Material.JACK_O_LANTERN) {
                         event.setCancelled(true);
                     }
                     continue;
@@ -1277,7 +1278,7 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
             final DeathCube dc = var3.next();
             if (dc.hasCorrectLocation && dc.contains(event.getItemDrop().getLocation(), dc.dropProtection)) {
                 final Player p = event.getPlayer();
-                if (dc.contains(event.getItemDrop().getLocation(), -9) && event.getItemDrop().getItemStack().getTypeId() == 91) {
+                if (dc.contains(event.getItemDrop().getLocation(), -9) && event.getItemDrop().getItemStack().getType() == Material.JACK_O_LANTERN) {
                     p.sendMessage(ChatColor.GRAY + "Hey it's just your joker!");
                 } else {
                     p.sendMessage(ChatColor.GRAY + "Please dispose your junk somewhere else.");
@@ -1309,7 +1310,7 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onRedstoneEvent(final BlockRedstoneEvent event) {
-        if (event.getBlock().getType() == Material.REDSTONE_LAMP_ON) {
+        if (event.getBlock().getType() == Material.REDSTONE_LAMP && ((Lightable) event.getBlock().getBlockData()).isLit()) {
             final Iterator<DeathCube> var3 = this.cubeNames.values().iterator();
             while (var3.hasNext()) {
                 final DeathCube dc = var3.next();
@@ -1337,10 +1338,11 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
                             }
                             break;
                         }
-                        if (event.getBlock().getTypeId() == 91) {
+                        if (event.getBlock().getType() == Material.JACK_O_LANTERN) {
                             final Location loc = event.getBlockPlaced().getLocation();
                             if (dc.contains(loc, -8) && loc.getBlockY() >= dc.startHeight && loc.getBlockY() <= dc.height) {
-                                event.getBlockPlaced().setTypeIdAndData(86, (byte) this.random(0, 3), true);
+                                event.getBlockPlaced().setType(Material.PUMPKIN);
+                                // Todo: Set random facing
                                 break;
                             }
                             event.setCancelled(true);
@@ -1554,7 +1556,7 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
                 if (dc.contains(loc)) {
                     final Player p = event.getPlayer();
                     if (dc.contains(loc, -8)) {
-                        if (event.getBlock().getTypeId() == 91 && this.checkPermissions((CommandSender) p, 1)) {
+                        if (event.getBlock().getType() == Material.JACK_O_LANTERN && this.checkPermissions((CommandSender) p, 1)) {
                             if (!dc.isActive(p)) {
                                 if (!this.checkPermissions((CommandSender) p, 3)) {
                                     event.setCancelled(true);
@@ -1719,7 +1721,7 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
         dc.burnExpand = this.getInt(path + "burnExpand", 3);
         dc.posTower = this.getBoolean(path + "posTower", true);
         dc.posTowerRate = this.getLong(path + "posTowerRate", 100L);
-        dc.posTowerId = this.getInt(path + "posTowerId", 123);
+        dc.posTowerId = Material.getMaterial(this.getString(path + "posTowerId", Material.REDSTONE_LAMP.name()));
         dc.broadcast = this.getBoolean(path + "broadcast", true);
         dc.offlineFeed = this.getBoolean(path + "offlineFeed", true);
         dc.autoRemove = this.getBoolean(path + "autoRemove", false);
@@ -1914,7 +1916,7 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
                     System.out.println("Unkown error while looking for updates.");
                 }
             }
-        } 10L);
+        }, 10L);
     }
 
     private void fileDownload(final String link, final String localFile) {

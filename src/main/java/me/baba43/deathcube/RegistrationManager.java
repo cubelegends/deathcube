@@ -74,8 +74,8 @@ public class RegistrationManager {
                     try {
                         final String nachricht;
                         String e = "";
-                        for (final Iterator<String> key = RegistrationManager.this.warteSchlange.iterator(); key.hasNext(); e = e + n + ",") {
-                            final String n = key.next();
+                        for (final String n : RegistrationManager.this.warteSchlange) {
+                            e = e + n + ",";
                         }
                         e = e.substring(0, e.length() - 1);
                         final int n2 = RegistrationManager.this.plugin.getServer().getPort();

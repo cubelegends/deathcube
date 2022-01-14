@@ -1,5 +1,6 @@
 package me.baba43.deathcube;
 
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -20,7 +21,7 @@ public class PositionTimer implements Runnable {
 
     private final int maxY;
 
-    private final int blockID;
+    private final Material blockID;
 
     private final ArrayList<Integer> activeLevels = new ArrayList<>();
 
@@ -28,7 +29,7 @@ public class PositionTimer implements Runnable {
 
     private final World w;
 
-    public PositionTimer(final World w, final int minX, final int maxX, final int minY, final int maxY, final int minZ, final int maxZ, final ArrayList<Player> player, final int blockID) {
+    public PositionTimer(final World w, final int minX, final int maxX, final int minY, final int maxY, final int minZ, final int maxZ, final ArrayList<Player> player, final Material blockID) {
         this.w = w;
         final byte abstand = 6;
         this.minX = minX + abstand;
@@ -61,14 +62,14 @@ public class PositionTimer implements Runnable {
         if (this.activePlayers.isEmpty()) {
             System.out.println("LEER");
         }
-        for (final Iterator<Player> i = this.activePlayers.iterator(); i.hasNext(); newLevels.add(Integer.valueOf(h))) {
-            final Player p = i.next();
+        for (final Player p : this.activePlayers) {
             int h = p.getLocation().getBlockY();
             if (h < this.minY) {
                 h = this.minY;
             } else if (h > this.maxY) {
                 h = this.maxY;
             }
+            newLevels.add(Integer.valueOf(h));
         }
         Iterator<Integer> p1 = this.activeLevels.iterator();
         while (p1.hasNext()) {
@@ -109,18 +110,18 @@ public class PositionTimer implements Runnable {
     }
 
     private void setActive(final Block b) {
-        b.setTypeId(this.blockID, true);
+        b.setType(this.blockID, true);
     }
 
     private void setInactive(final Block b) {
-        b.setTypeId(0);
+        b.setType(Material.AIR, true);
     }
 
     private void setBlock(final Block b, final boolean active) {
         if (active) {
-            b.setTypeId(3);
+            b.setType(Material.DIRT);
         } else {
-            b.setTypeId(0);
+            b.setType(Material.AIR);
         }
     }
 }
