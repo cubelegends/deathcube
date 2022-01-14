@@ -75,12 +75,12 @@ public class GameManager {
         return null;
     }
 
-    public void newTempTask(int minutes, boolean user) {
+    public void newTempTask(final int minutes, final boolean user) {
         this.taskByUser = user;
         if (!this.tempTimers.isEmpty()) {
-            Iterator<Integer> task = this.tempTimers.iterator();
+            final Iterator<Integer> task = this.tempTimers.iterator();
             while (task.hasNext()) {
-                int timeTo15s = ((Integer) task.next()).intValue();
+                final int timeTo15s = ((Integer) task.next()).intValue();
                 this.scheduler.cancelTask(timeTo15s);
             }
         }
@@ -90,7 +90,7 @@ public class GameManager {
             this.dc.buildTunnel();
             this.dc.buildCube((CommandSender) null);
             this.broadcastLocal((this.dc.getPlugin()).lang.get("15sBroadcast").replace("%dcname%", this.dc.getName()));
-            int timeTo15s = this.scheduler.scheduleSyncDelayedTask((Plugin) this.dc.getPlugin(), new Runnable() {
+            final int timeTo15s = this.scheduler.scheduleSyncDelayedTask((Plugin) this.dc.getPlugin(), new Runnable() {
                 @Override
                 public void run() {
                     GameManager.this.startTaskGame();
@@ -99,32 +99,32 @@ public class GameManager {
         } else {
             this.tempTime = (new Date()).getTime() + (minutes * 60 * 1000);
             if (minutes > 10) {
-                int i = minutes - 10;
-                int j = this.scheduler.scheduleSyncDelayedTask((Plugin) this.dc.getPlugin(), new Runnable() {
+                final int i = minutes - 10;
+                final int j = this.scheduler.scheduleSyncDelayedTask((Plugin) this.dc.getPlugin(), new Runnable() {
                     @Override
                     public void run() {
                         GameManager.this.broadcast((GameManager.this.dc.getPlugin()).lang.get("XmBroadcast").replace("%dcname%", GameManager.this.dc.getName()).replace("%minutes%", "10"));
                     }
-                } (i * 20 * 60));
+                }, (i * 20 * 60));
                 this.tempTimers.add(Integer.valueOf(j));
             } else if (minutes == 10) {
                 this.broadcast((this.dc.getPlugin()).lang.get("1mBroadcast").replace("%dcname%", this.dc.getName()).replace("%minutes%", "1"));
             }
             if (minutes > 1) {
-                int i = minutes - 1;
-                int j = this.scheduler.scheduleSyncDelayedTask((Plugin) this.dc.getPlugin(), new Runnable() {
+                final int i = minutes - 1;
+                final int j = this.scheduler.scheduleSyncDelayedTask((Plugin) this.dc.getPlugin(), new Runnable() {
                     @Override
                     public void run() {
                         if (!GameManager.this.dc.gameRunning) {
                             GameManager.this.broadcast((GameManager.this.dc.getPlugin()).lang.get("XmBroadcast").replace("%dcname%", GameManager.this.dc.getName()).replace("%minutes%", "1"));
                         }
                     }
-                } (i * 20 * 60));
+                }, (i * 20 * 60));
                 this.tempTimers.add(Integer.valueOf(j));
             } else if (minutes == 1) {
                 this.broadcast((this.dc.getPlugin()).lang.get("1mBroadcast").replace("%dcname%", this.dc.getName()));
             }
-            int timeTo15s = minutes * 60 - 15;
+            final int timeTo15s = minutes * 60 - 15;
             int task1 = this.scheduler.scheduleSyncDelayedTask((Plugin) this.dc.getPlugin(), new Runnable() {
                 @Override
                 public void run() {
@@ -135,9 +135,9 @@ public class GameManager {
                         GameManager.this.broadcastLocal((GameManager.this.dc.getPlugin()).lang.get("15sBroadcast").replace("%dcname%", GameManager.this.dc.getName()));
                     }
                 }
-            } (timeTo15s * 20));
+            }, (timeTo15s * 20));
             this.tempTimers.add(Integer.valueOf(task1));
-            Long timeToStart = Long.valueOf((minutes * 60 * 20));
+            final Long timeToStart = Long.valueOf((minutes * 60 * 20));
             task1 = this.scheduler.scheduleSyncDelayedTask((Plugin) this.dc.getPlugin(), new Runnable() {
                 @Override
                 public void run() {
