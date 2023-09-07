@@ -458,8 +458,8 @@ public class DeathCube {
 
     public void openGates() {
         this.isOpened = true;
-        final int mitteX = this.minX + (this.maxX - this.minX) / 2 - this.stageWidth - 1;
-        final int mitteZ = this.minZ + (this.maxZ - this.minZ) / 2 - this.stageWidth - 1;
+        final int mitteX = this.minX + (this.maxX - this.minX) / 2 - this.stageWidth + 1;
+        final int mitteZ = this.minZ + (this.maxZ - this.minZ) / 2 - this.stageWidth + 1;
         final int height = this.stageLevel + 1;
         int i;
         for (i = 0; i < this.stageWidth * 2; i++) {
@@ -702,7 +702,7 @@ public class DeathCube {
                     this.bb.setFloorBlock(w.getBlockAt(i, height - 1, minZ));
                     this.bb.setFloorBlock(w.getBlockAt(i, height - 1, maxZ));
                 }
-                if (i >= mitteX - this.stageWidth - 1 && i <= mitteX + this.stageWidth) {
+                if (i >= mitteX - this.stageWidth + 1 && i <= mitteX + this.stageWidth) {
                     w.getBlockAt(i, height, minZ).setType(Material.GLASS_PANE);
                     w.getBlockAt(i, height, maxZ).setType(Material.GLASS_PANE);
                 } else {
@@ -713,7 +713,7 @@ public class DeathCube {
                     this.bb.setFloorBlock(w.getBlockAt(minX, height - 1, e));
                     this.bb.setFloorBlock(w.getBlockAt(maxX, height - 1, e));
                 }
-                if (e >= mitteZ - this.stageWidth - 1 && e <= mitteZ + this.stageWidth) {
+                if (e >= mitteZ - this.stageWidth + 1 && e <= mitteZ + this.stageWidth) {
                     w.getBlockAt(minX, height, e).setType(Material.GLASS_PANE);
                     w.getBlockAt(maxX, height, e).setType(Material.GLASS_PANE);
                 } else {
