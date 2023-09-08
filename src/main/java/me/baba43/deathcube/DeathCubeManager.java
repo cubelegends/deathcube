@@ -192,8 +192,6 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
                                                 } else {
                                                     sender.sendMessage(this.lang.get("noPermissions"));
                                                 }
-                                            } else if (args[0].equalsIgnoreCase("db")) {
-                                                this.debugMessage(sender, args);
                                             } else if (args[0].equalsIgnoreCase("baba")) {
                                                 this.onBabaIsHere(sender);
                                             } else if (args[0].equalsIgnoreCase("clear")) {
@@ -278,12 +276,6 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
                 this.getServer().broadcastMessage(ChatColor.GRAY + "DC: Hello Baba! :)");
             }
         }
-    }
-
-    private void debugMessage(final CommandSender sender, final String[] args) {
-        sender.sendMessage(this.getServer().getName());
-        final Player p = (Player) sender;
-        p.sendMessage("Aa" + p.getHealth());
     }
 
     public boolean checkPermissions(final CommandSender sender, final int level) {
