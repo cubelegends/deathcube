@@ -492,10 +492,10 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
                 sender.sendMessage(this.lang.get("warningPotion"));
             }
             if (p.getInventory().contains(Material.ENDER_PEARL)) {
-                sender.sendMessage(this.lang.get("warningEnderpearl"));
+                sender.sendMessage(this.lang.get("warningEnderPearl"));
             }
             if (p.getGameMode() == GameMode.CREATIVE) {
-                sender.sendMessage(ChatColor.GRAY + "Your gamemode will be removed on start!");
+                sender.sendMessage(ChatColor.GRAY + "Your game mode will be removed on start!");
             }
             final DeathCube dc = this.findDeathCubeBySender((CommandSender) p);
             if (dc != null) {
@@ -1122,7 +1122,7 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
                             final DeathCube line = this.findDeathCubeBySender(sender);
                             if (line != null) {
                                 if (line.hasCorrectLocation) {
-                                    sender.sendMessage(ChatColor.GRAY + "* Its not allowed to take " + ChatColor.GOLD + "Jack O'Lanterns" + ChatColor.GRAY + " or " + ChatColor.GOLD + "enchanted items" + ChatColor.GRAY + " with you. " + ChatColor.GOLD + "Enderpearls" + ChatColor.GRAY + " and " + ChatColor.GOLD + "potions" + ChatColor.GRAY + " are blocked while playing");
+                                    sender.sendMessage(ChatColor.GRAY + "* Its not allowed to take " + ChatColor.GOLD + "Jack O'Lanterns" + ChatColor.GRAY + " or " + ChatColor.GOLD + "enchanted items" + ChatColor.GRAY + " with you. " + ChatColor.GOLD + "Ender pearls" + ChatColor.GRAY + " and " + ChatColor.GOLD + "potions" + ChatColor.GRAY + " are blocked while playing");
                                     if (line.kickOnCheat) {
                                         sender.sendMessage(ChatColor.GRAY + "* If you try to place any block while playing you will be kicked");
                                     }
@@ -1292,7 +1292,7 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
                             event.setCancelled(true);
                             break;
                         }
-                        dc.playerLeft(p, this.lang.get("leaveBlockplaceA"), this.lang.get("leaveBlockplaceP"));
+                        dc.playerLeft(p, this.lang.get("leaveBlockPlaceA"), this.lang.get("leaveBlockPlaceP"));
                         dc.tpToSpawn(p);
                         event.setCancelled(true);
                     }
@@ -1353,7 +1353,7 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
             while (var4.hasNext()) {
                 final DeathCube dc = var4.next();
                 if (dc.isActive(p)) {
-                    dc.playerLeft(p, this.lang.get("leaveEnderpearlA"), this.lang.get("leaveEnderpearlP"));
+                    dc.playerLeft(p, this.lang.get("leaveEnderPearlA"), this.lang.get("leaveEnderPearlP"));
                     dc.tpToSpawn(p);
                     break;
                 }
@@ -1450,7 +1450,7 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
                             p.sendMessage(this.lang.get("notHungry"));
                             continue;
                         }
-                        p.sendMessage(this.lang.get("notIngame"));
+                        p.sendMessage(this.lang.get("notInGame"));
                         continue;
                     }
                     if (p.getFoodLevel() < 20) {

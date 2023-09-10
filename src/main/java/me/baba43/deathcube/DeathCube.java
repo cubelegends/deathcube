@@ -346,7 +346,7 @@ public class DeathCube {
                             }
                         }
                         if (this.activePlayers.size() == 1) {
-                            var6 = this.gl("playingAllone");
+                            var6 = this.gl("playingAlone");
                         } else if (this.activePlayers.size() == 2) {
                             var6 = this.gl("playingOne");
                         } else {
