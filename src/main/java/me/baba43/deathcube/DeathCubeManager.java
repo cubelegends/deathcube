@@ -1320,6 +1320,7 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
                         }
                         break;
                     }
+                    dc.updateScore(p);
                     if (dc.looseOnFall && p.getLocation().getBlockY() <= dc.startHeight - 1) {
                         dc.playerLeft(p, this.lang.get("leaveFallA"), this.lang.get("leaveFallA"));
                         dc.tpToSpawn(p);
