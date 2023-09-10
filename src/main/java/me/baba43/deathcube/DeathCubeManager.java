@@ -40,7 +40,7 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
 
     public Language lang;
 
-    private final String version = "3.0.3";
+    private final String version = "3.1.0-SNAPSHOT";
 
     private final ArrayList<String> allowedCommands = new ArrayList<>();
 
@@ -1558,7 +1558,7 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
         this.loadDeathCubes();
         this.lang = new Language(this);
         this.getServer().getPluginManager().registerEvents(this, (Plugin) this);
-        System.out.println("DeathCube 3.0.3 enabled!");
+        System.out.println("DeathCube 3.1.0-SNAPSHOT enabled!");
     }
 
     private void loadDeathCubes() {
