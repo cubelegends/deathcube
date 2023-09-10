@@ -1,5 +1,6 @@
 package me.baba43.deathcube;
 
+import de.cubelegends.deathcube.ScoreboardConnector;
 import org.bukkit.*;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.MultipleFacing;
@@ -143,10 +144,13 @@ public class DeathCube {
 
     private final ArrayList<Integer> burnLevels = new ArrayList<>();
 
+    private ScoreboardConnector scoreboardConnector;
+
     public DeathCube(final String name, final DeathCubeManager plugin) {
         this.name = name;
         this.plugin = plugin;
         this.gm = new GameManager(this);
+        this.scoreboardConnector = new ScoreboardConnector(this);
     }
 
     public void setBlockBar(final BlockBar bb) {
@@ -215,6 +219,7 @@ public class DeathCube {
             this.openGates();
             this.buildCube((CommandSender) null);
         }
+        this.scoreboardConnector.clear();
     }
 
     private String elapsedTimeToString(long time) {
@@ -409,6 +414,7 @@ public class DeathCube {
                 if (p.getBlockY() == this.stageLevel + 1 || p.getBlockY() == this.stageLevel + 2) {
                     if (this.contains(p, -1) && !this.contains(p, -4) && this.controlPlayer(message)) {
                         this.activePlayers.add(message);
+                        this.scoreboardConnector.addPlayer(message);
                         message.sendMessage(this.plugin.lang.get("privateStart"));
                     }
                 }
@@ -798,5 +804,9 @@ public class DeathCube {
     private int random(final int from, int to) {
         to++;
         return (int) (Math.random() * (to - from) + from);
+    }
+
+    public void updateScore(Player player) {
+        this.scoreboardConnector.updateScore(player);
     }
 }
