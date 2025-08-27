@@ -2,6 +2,7 @@ package com.henningstorck.deathcube;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.Vector;
@@ -14,7 +15,7 @@ public class BlockBar {
 	private boolean isSet;
 	private Location origin;
 	private Vector vector;
-	private int[] fixedBlocks = new int[]{4, 11, 14};
+	private final Material[] fixedBlocks = new Material[]{Material.YELLOW_WOOL, Material.BLUE_WOOL, Material.RED_WOOL};
 	private int minX;
 	private int minY;
 	private int minZ;
@@ -38,8 +39,8 @@ public class BlockBar {
 		Location searchLocation = start.clone();
 		Location searchLocation2 = searchLocation.clone().add(0.0D, 1.0D, 0.0D);
 		this.floorBlock = searchLocation2.getBlock();
-		if (this.floorBlock.getTypeId() == 0) {
-			searchLocation2.getBlock().setTypeIdAndData(35, (byte) 8, true);
+		if (this.floorBlock.getType() == Material.AIR) {
+			searchLocation2.getBlock().setType(Material.LIGHT_GRAY_WOOL, true);
 			this.floorBlock = searchLocation2.getBlock();
 		}
 
@@ -51,13 +52,13 @@ public class BlockBar {
 
 		while (bugCounter < 20) {
 			boolean max = true;
-			if (searchLocation.getBlock().getTypeId() != 0) {
+			if (searchLocation.getBlock().getType() != Material.AIR) {
 				max = false;
 				this.cageBlocks.add(searchLocation.getBlock());
 				searchLocation = searchLocation.add(this.vector);
 			}
 
-			if (searchLocation2.getBlock().getTypeId() != 0) {
+			if (searchLocation.getBlock().getType() != Material.AIR) {
 				max = false;
 				this.cubeBlocks.add(searchLocation2.getBlock());
 				searchLocation2 = searchLocation2.add(this.vector);
@@ -94,9 +95,9 @@ public class BlockBar {
 	public void setCageBlock(Block b) {
 		if (this.isSet) {
 			Block newBlock = (Block) this.cageBlocks.get(this.random(0, this.cageBlocks.size() - 1));
-			b.setTypeIdAndData(newBlock.getTypeId(), newBlock.getData(), true);
+			b.setType(newBlock.getType(), true);
 		} else {
-			b.setTypeIdAndData(35, (byte) this.fixedBlocks[this.random(0, 2)], false);
+			b.setType(this.fixedBlocks[this.random(0, 2)], false);
 		}
 
 	}
@@ -104,25 +105,25 @@ public class BlockBar {
 	public void setCubeBlock(Block b) {
 		if (this.isSet) {
 			Block newBlock = (Block) this.cubeBlocks.get(this.random(0, this.cubeBlocks.size() - 1));
-			b.setTypeIdAndData(newBlock.getTypeId(), newBlock.getData(), true);
+			b.setType(newBlock.getType(), true);
 		} else {
-			b.setTypeIdAndData(35, (byte) this.fixedBlocks[this.random(0, 2)], false);
+			b.setType(this.fixedBlocks[this.random(0, 2)], false);
 		}
 
 	}
 
 	public void setFloorBlock(Block b) {
 		if (this.isSet) {
-			b.setTypeIdAndData(this.floorBlock.getTypeId(), this.floorBlock.getData(), true);
+			b.setType(this.floorBlock.getType(), true);
 		} else {
-			b.setTypeIdAndData(35, (byte) 8, false);
+			b.setType(Material.LIGHT_GRAY_WOOL, false);
 		}
 
 	}
 
 	public void verifyBlocks() {
-		if (this.floorBlock != null && this.floorBlock.getTypeId() == 0) {
-			this.floorBlock.setTypeIdAndData(35, (byte) 8, false);
+		if (this.floorBlock != null && this.floorBlock.getType() == Material.AIR) {
+			this.floorBlock.setType(Material.LIGHT_GRAY_WOOL, false);
 		}
 
 		if (this.cubeBlocks.size() > 0 && this.cageBlocks.size() > 0) {

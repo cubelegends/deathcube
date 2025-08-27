@@ -4,6 +4,7 @@ description: DeathCube v3.0.0-SNAPSHOT
 author: henningstorck
 main: com.henningstorck.deathcube.DeathCubeManager
 softdepend: [ 'Multiverse-Core' ]
+api-version: 1.13
 
 commands:
   dc:

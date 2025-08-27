@@ -1,5 +1,6 @@
 package com.henningstorck.deathcube;
 
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -14,12 +15,12 @@ public class PositionTimer implements Runnable {
 	private int maxZ;
 	private int minY;
 	private int maxY;
-	private int blockID;
+	private final Material blockID;
 	private ArrayList<Integer> activeLevels = new ArrayList();
 	private ArrayList<Player> activePlayers;
 	private World w;
 
-	public PositionTimer(World w, int minX, int maxX, int minY, int maxY, int minZ, int maxZ, ArrayList<Player> player, int blockID) {
+	public PositionTimer(World w, int minX, int maxX, int minY, int maxY, int minZ, int maxZ, ArrayList<Player> player, Material blockID) {
 		this.w = w;
 		byte abstand = 6;
 		this.minX = minX + abstand;
@@ -110,18 +111,18 @@ public class PositionTimer implements Runnable {
 	}
 
 	private void setActive(Block b) {
-		b.setTypeId(this.blockID, true);
+		b.setType(this.blockID, true);
 	}
 
 	private void setInactive(Block b) {
-		b.setTypeId(0);
+		b.setType(Material.AIR);
 	}
 
 	private void setBlock(Block b, boolean active) {
 		if (active) {
-			b.setTypeId(3);
+			b.setType(Material.DIRT);
 		} else {
-			b.setTypeId(0);
+			b.setType(Material.AIR);
 		}
 
 	}

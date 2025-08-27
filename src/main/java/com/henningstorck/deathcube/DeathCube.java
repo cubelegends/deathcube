@@ -30,7 +30,7 @@ public class DeathCube {
 	public int maxY;
 	public World world;
 	public int stageWidth;
-	public int posTowerId;
+	public Material posTowerId;
 	public int dropProtection;
 	public int mode;
 	public int timeLimit;
@@ -199,8 +199,8 @@ public class DeathCube {
 				target = new Location(this.world, (double) (this.minX + (this.maxX - this.minX) / 2 + 1), (double) (this.stageLevel + 1), (double) (this.maxZ - 2), 180.0F, -10.0F);
 		}
 
-		if (target.getBlock().getTypeId() == 0 && this.world.getBlockAt(target.getBlockX(), target.getBlockY() + 1, target.getBlockZ()).getTypeId() == 0) {
-			if (this.world.getBlockAt(target.getBlockX(), target.getBlockY() - 1, target.getBlockZ()).getTypeId() != 0) {
+		if (target.getBlock().getType() == Material.AIR && this.world.getBlockAt(target.getBlockX(), target.getBlockY() + 1, target.getBlockZ()).getType() == Material.AIR) {
+			if (this.world.getBlockAt(target.getBlockX(), target.getBlockY() - 1, target.getBlockZ()).getType() != Material.AIR) {
 				p.setNoDamageTicks(20);
 				p.teleport(target);
 				if (this.advertiseTournament) {
@@ -333,7 +333,7 @@ public class DeathCube {
 								var9.getInventory().remove(Material.JACK_O_LANTERN);
 								if (this.pkinProbability > 0 || this.pkinStart > 0) {
 									if (this.pkinStart > 0) {
-										var9.getInventory().addItem(new ItemStack[]{new ItemStack(91, this.pkinStart)});
+										var9.getInventory().addItem(new ItemStack[]{new ItemStack(Material.JACK_O_LANTERN, this.pkinStart)});
 									}
 
 									var9.sendMessage(this.gl("notifyJacko"));
@@ -452,8 +452,8 @@ public class DeathCube {
 		int i;
 		int e;
 		for (i = 0; i < this.stageWidth * 2; ++i) {
-			this.world.getBlockAt(mitteX + i, height, this.minZ + 3).setTypeId(0);
-			this.world.getBlockAt(mitteX + i, height, this.maxZ - 3).setTypeId(0);
+			this.world.getBlockAt(mitteX + i, height, this.minZ + 3).setType(Material.AIR);
+			this.world.getBlockAt(mitteX + i, height, this.maxZ - 3).setType(Material.AIR);
 
 			for (e = 4; e < 7; ++e) {
 				this.bb.setFloorBlock(this.world.getBlockAt(mitteX + i, this.stageLevel, this.minZ + e));
@@ -462,8 +462,8 @@ public class DeathCube {
 		}
 
 		for (i = 0; i < this.stageWidth * 2; ++i) {
-			this.world.getBlockAt(this.minX + 3, height, mitteZ + i).setTypeId(0);
-			this.world.getBlockAt(this.maxX - 3, height, mitteZ + i).setTypeId(0);
+			this.world.getBlockAt(this.minX + 3, height, mitteZ + i).setType(Material.AIR);
+			this.world.getBlockAt(this.maxX - 3, height, mitteZ + i).setType(Material.AIR);
 
 			for (e = 4; e < 7; ++e) {
 				this.bb.setFloorBlock(this.world.getBlockAt(this.minX + e, this.stageLevel, mitteZ + i));
@@ -617,7 +617,7 @@ public class DeathCube {
 		for (int h = this.startHeight; h <= 255; ++h) {
 			for (int i = this.minX + 5; i < this.maxX - 4; ++i) {
 				for (int e = this.minZ + 5; e < this.maxZ - 4; ++e) {
-					this.world.getBlockAt(i, h, e).setTypeId(0);
+					this.world.getBlockAt(i, h, e).setType(Material.AIR);
 				}
 			}
 		}
@@ -628,7 +628,7 @@ public class DeathCube {
 		for (int h = this.startHeight; h <= 255; ++h) {
 			for (int i = this.minX + 5; i < this.maxX - 4; ++i) {
 				for (int e = this.minZ + 5; e < this.maxZ - 4; ++e) {
-					this.world.getBlockAt(i, h, e).setTypeId(0);
+					this.world.getBlockAt(i, h, e).setType(Material.AIR);
 				}
 			}
 		}
@@ -654,12 +654,13 @@ public class DeathCube {
 						for (int e = minZ + 5; e < maxZ - 4; ++e) {
 							if (DeathCube.this.random(0, DeathCube.this.density) == 0) {
 								if (DeathCube.this.pkinProbability != 0 && DeathCube.this.random(0, DeathCube.this.pkinProbability) == 0) {
-									w.getBlockAt(i, now, e).setTypeIdAndData(91, (byte) DeathCube.this.random(0, 4), true);
+									w.getBlockAt(i, now, e).setType(Material.JACK_O_LANTERN, true);
+									// Todo: Set random facing
 								} else {
 									DeathCube.this.bb.setCubeBlock(w.getBlockAt(i, now, e));
 								}
 							} else {
-								w.getBlockAt(i, now, e).setTypeId(0);
+								w.getBlockAt(i, now, e).setType(Material.AIR);
 							}
 						}
 					}
@@ -700,10 +701,10 @@ public class DeathCube {
 		int mitteZ;
 		for (mitteX = minX + 1; mitteX < maxX; ++mitteX) {
 			for (mitteZ = minZ; mitteZ < maxZ + 1; ++mitteZ) {
-				w.getBlockAt(mitteX, height, minZ).setTypeId(20);
-				w.getBlockAt(mitteX, height, maxZ).setTypeId(20);
-				w.getBlockAt(minX, height, mitteZ).setTypeId(20);
-				w.getBlockAt(maxX, height, mitteZ).setTypeId(20);
+				w.getBlockAt(mitteX, height, minZ).setType(Material.GLASS);
+				w.getBlockAt(mitteX, height, maxZ).setType(Material.GLASS);
+				w.getBlockAt(minX, height, mitteZ).setType(Material.GLASS);
+				w.getBlockAt(maxX, height, mitteZ).setType(Material.GLASS);
 			}
 		}
 
@@ -723,11 +724,11 @@ public class DeathCube {
 				}
 
 				if (i >= mitteX - (this.stageWidth - 1) && i <= mitteX + this.stageWidth) {
-					w.getBlockAt(i, height, minZ).setTypeId(102);
-					w.getBlockAt(i, height, maxZ).setTypeId(102);
+					w.getBlockAt(i, height, minZ).setType(Material.GLASS_PANE);
+					w.getBlockAt(i, height, maxZ).setType(Material.GLASS_PANE);
 				} else {
-					w.getBlockAt(i, height, minZ).setTypeId(20);
-					w.getBlockAt(i, height, maxZ).setTypeId(20);
+					w.getBlockAt(i, height, minZ).setType(Material.GLASS);
+					w.getBlockAt(i, height, maxZ).setType(Material.GLASS);
 				}
 
 				if (e >= mitteZ - this.stageWidth && e <= mitteZ + 1 + this.stageWidth) {
@@ -736,11 +737,11 @@ public class DeathCube {
 				}
 
 				if (e >= mitteZ - (this.stageWidth - 1) && e <= mitteZ + this.stageWidth) {
-					w.getBlockAt(minX, height, e).setTypeId(102);
-					w.getBlockAt(maxX, height, e).setTypeId(102);
+					w.getBlockAt(minX, height, e).setType(Material.GLASS_PANE);
+					w.getBlockAt(maxX, height, e).setType(Material.GLASS_PANE);
 				} else {
-					w.getBlockAt(minX, height, e).setTypeId(20);
-					w.getBlockAt(maxX, height, e).setTypeId(20);
+					w.getBlockAt(minX, height, e).setType(Material.GLASS);
+					w.getBlockAt(maxX, height, e).setType(Material.GLASS);
 				}
 			}
 		}
@@ -752,10 +753,10 @@ public class DeathCube {
 			for (int i = this.minX + 2; i < this.maxX - 1; ++i) {
 				for (int e = this.minZ + 2; e < this.maxZ - 2; ++e) {
 					for (int b = 0; b < 5; ++b) {
-						this.world.getBlockAt(i, this.stageLevel + h, this.minZ + 2 + b).setTypeId(0);
-						this.world.getBlockAt(i, this.stageLevel + h, this.maxZ - 2 - b).setTypeId(0);
-						this.world.getBlockAt(this.minX + 2 + b, this.stageLevel + h, e).setTypeId(0);
-						this.world.getBlockAt(this.maxX - 2 - b, this.stageLevel + h, e).setTypeId(0);
+						this.world.getBlockAt(i, this.stageLevel + h, this.minZ + 2 + b).setType(Material.AIR);
+						this.world.getBlockAt(i, this.stageLevel + h, this.maxZ - 2 - b).setType(Material.AIR);
+						this.world.getBlockAt(this.minX + 2 + b, this.stageLevel + h, e).setType(Material.AIR);
+						this.world.getBlockAt(this.maxX - 2 - b, this.stageLevel + h, e).setType(Material.AIR);
 					}
 				}
 			}
@@ -776,13 +777,13 @@ public class DeathCube {
 
 			for (int x = minX; x < maxX; ++x) {
 				for (int z = minZ; z < maxZ; ++z) {
-					if (this.world.getBlockAt(x, oneLevel, z).getTypeId() != 0) {
+					if (this.world.getBlockAt(x, oneLevel, z).getType() != Material.AIR) {
 						if (empty) {
 							empty = false;
 						}
 
 						if (this.random(0, this.burnChance) == this.burnChance) {
-							this.world.getBlockAt(x, oneLevel, z).setTypeId(0);
+							this.world.getBlockAt(x, oneLevel, z).setType(Material.AIR);
 						}
 					}
 				}
