@@ -1,11 +1,8 @@
 name: DeathCube
 version: 2.5
 description: DeathCube v2.5
-author: baba43
-website: http://www.bukkit.org/
-
+author: henningstorck
 main: me.baba43.DeathCube.DeathCubeManager
-
 softdepend: [ 'Multiverse-Core' ]
 
 commands:
