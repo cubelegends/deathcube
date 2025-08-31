@@ -36,7 +36,6 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
 	private DeathCube defaultDC;
 	private boolean upToDate = true;
 	private boolean notUpdated = false;
-	private RegistrationManager registrator;
 
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		if (cmd.getName().equalsIgnoreCase("dc")) {
@@ -146,12 +145,6 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
 										this.onSpawnSetRequest(sender);
 									} else {
 										sender.sendMessage(this.lang.get("noPermissions"));
-									}
-								} else if (args[0].equalsIgnoreCase("register")) {
-									if (args.length == 2 && args[1].equalsIgnoreCase("zap-hosting.de")) {
-										this.registrator.onRegistrationRequest(sender);
-									} else {
-										sender.sendMessage(ChatColor.RED + "You need to enter a correct password to use this command.");
 									}
 								} else if (args[0].equalsIgnoreCase("delete")) {
 									if (this.checkPermissions(sender, 3)) {
@@ -1757,7 +1750,6 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
 			this.config.set("global.autoUpdate", true);
 		}
 
-		this.registrator = new RegistrationManager(this, this.getBoolean("global.allowRegistration", true));
 		if (this.config.contains("cubes")) {
 			Iterator var9 = this.config.getConfigurationSection("cubes").getKeys(false).iterator();
 
