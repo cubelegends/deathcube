@@ -1,4 +1,4 @@
-package me.baba43.DeathCube;
+package com.henningstorck.deathcube;
 
 public class DeathTick implements Runnable {
 	private DeathCube dc;

@@ -1,4 +1,4 @@
-package me.baba43.DeathCube;
+package com.henningstorck.deathcube;
 
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;

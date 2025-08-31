@@ -1,4 +1,4 @@
-package me.baba43.DeathCube;
+package com.henningstorck.deathcube;
 
 public class Settings {
 	public int density;
