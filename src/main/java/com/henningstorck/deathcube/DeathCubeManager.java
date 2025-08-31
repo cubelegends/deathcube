@@ -35,213 +35,303 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
 	private DeathCube defaultDC;
 
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-		if (cmd.getName().equalsIgnoreCase("dc")) {
-			if (args.length > 0) {
-				if (args[0].equalsIgnoreCase("create")) {
-					if (this.checkPermissions(sender, 3)) {
-						this.onCubeCreationRequest(sender);
+		if (!cmd.getName().equalsIgnoreCase("dc")) {
+			return true;
+		}
+
+		if (args.length <= 0) {
+			sender.sendMessage(ChatColor.RED + "Try /dc help");
+			return true;
+		}
+
+		if (args[0].equalsIgnoreCase("create")) {
+			if (this.checkPermissions(sender, 3)) {
+				this.onCubeCreationRequest(sender);
+			} else {
+				sender.sendMessage(ChatColor.RED + "No Permissions");
+			}
+
+			return true;
+		}
+
+		if (args[0].equalsIgnoreCase("select")) {
+			if (this.checkPermissions(sender, 1)) {
+				if (args.length == 1) {
+					this.tellSelection(sender);
+				} else if (args.length == 2) {
+					this.onSelectionRequest(sender, args[1]);
+				} else {
+					sender.sendMessage(ChatColor.RED + "Wrong usage. Use /dc select [name]");
+				}
+			} else {
+				sender.sendMessage(this.lang.get("noPermissions"));
+			}
+
+			return true;
+		}
+
+		if (args[0].equalsIgnoreCase("pos")) {
+			if (this.checkPermissions(sender, 3)) {
+				if (sender instanceof Player) {
+					if (args.length == 2) {
+						this.onSetLocationRequest(sender, args[1]);
+					} else if (args.length == 1) {
+						this.onCheckPositionRequest(sender);
 					} else {
-						sender.sendMessage(ChatColor.RED + "No Permissions");
+						sender.sendMessage(ChatColor.RED + "Wrong usage. Use /dc pos 1|2");
 					}
-				} else if (args[0].equalsIgnoreCase("select")) {
-					if (this.checkPermissions(sender, 1)) {
-						if (args.length == 1) {
-							this.tellSelection(sender);
-						} else if (args.length == 2) {
-							this.onSelectionRequest(sender, args[1]);
-						} else {
-							sender.sendMessage(ChatColor.RED + "Wrong usage. Use /dc select [name]");
-						}
+				} else {
+					sender.sendMessage(ChatColor.RED + "This command need to be run by a player!");
+				}
+			} else {
+				sender.sendMessage(this.lang.get("noPermissions"));
+			}
+
+			return true;
+		}
+
+		if (args[0].equalsIgnoreCase("new") || args[0].equalsIgnoreCase("n")) {
+			if (this.checkPermissions(sender, 2)) {
+				this.onCubeRenewRequest(sender);
+			} else {
+				sender.sendMessage(this.lang.get("noPermissions"));
+			}
+
+			return true;
+		}
+
+		if (args[0].equalsIgnoreCase("set")) {
+			if (this.checkPermissions(sender, 2)) {
+				if (args.length == 3) {
+					this.onChangeConfigurationRequest(sender, args[1], args[2]);
+				} else {
+					sender.sendMessage(ChatColor.RED + "Wrong usage! Use /dc set <key> <value>");
+					sender.sendMessage(ChatColor.RED + "Use '_' for spaces in strings");
+				}
+			} else {
+				sender.sendMessage(this.lang.get("noPermissions"));
+			}
+
+			return true;
+		}
+
+		if (args[0].equalsIgnoreCase("get")) {
+			if (this.checkPermissions(sender, 2)) {
+				if (args.length == 2) {
+					this.onGetConfigurationRequest(sender, args[1]);
+				} else {
+					sender.sendMessage(ChatColor.GRAY + "Use /dc get <key>");
+				}
+			} else {
+				sender.sendMessage(this.lang.get("noPermissions"));
+			}
+
+			return true;
+		}
+
+		if (args[0].equalsIgnoreCase("open")) {
+			if (this.checkPermissions(sender, 2)) {
+				this.onOpenGateRequest(sender);
+			} else {
+				sender.sendMessage(this.lang.get("noPermissions"));
+			}
+
+			return true;
+		}
+
+		if (args[0].equalsIgnoreCase("tp")) {
+			if (this.checkPermissions(sender, 1)) {
+				if (args.length == 2) {
+					this.onTeleportationRequest(sender, false, args[1]);
+				} else {
+					this.onTeleportationRequest(sender, false, (String) null);
+				}
+			} else {
+				sender.sendMessage(this.lang.get("noPermissions"));
+			}
+
+			return true;
+		}
+
+		if (args[0].equalsIgnoreCase("tpi")) {
+			if (this.checkPermissions(sender, 1)) {
+				if (args.length == 2) {
+					this.onTeleportationRequest(sender, true, args[1]);
+				} else {
+					this.onTeleportationRequest(sender, true, (String) null);
+				}
+			} else {
+				sender.sendMessage(this.lang.get("noPermissions"));
+			}
+
+			return true;
+		}
+
+		if (args[0].equalsIgnoreCase("food") || args[0].equalsIgnoreCase("f")) {
+			if (this.checkPermissions(sender, 1)) {
+				this.onPlayerWantsFood(sender);
+			} else {
+				sender.sendMessage(this.lang.get("noPermissions"));
+			}
+
+			return true;
+		}
+
+		if (args[0].equalsIgnoreCase("list")) {
+			if (this.checkPermissions(sender, 1)) {
+				this.onListDeathCubesRequest(sender);
+			} else {
+				sender.sendMessage(this.lang.get("noPermissions"));
+			}
+
+			return true;
+		}
+
+		if (args[0].equalsIgnoreCase("info") || args[0].equalsIgnoreCase("i")) {
+			sender.sendMessage(ChatColor.GREEN + "This server is running DeathCube " + this.version + "!");
+			return true;
+		}
+		if (args[0].equalsIgnoreCase("start") || args[0].equalsIgnoreCase("s")) {
+			if (!this.checkPermissions(sender, 2) && !sender.hasPermission("deathcube.start")) {
+				sender.sendMessage(this.lang.get("noPermissions"));
+			} else if (args.length == 2) {
+				this.onStartRequest(sender, args[1]);
+			} else {
+				this.onStartRequest(sender, (String) null);
+			}
+
+			return true;
+		}
+
+		if (args[0].equalsIgnoreCase("stop")) {
+			if (this.checkPermissions(sender, 2)) {
+				this.onStopRequest(sender);
+			} else {
+				sender.sendMessage(this.lang.get("noPermissions"));
+			}
+
+			return true;
+		}
+
+		if (args[0].equalsIgnoreCase("spawn")) {
+			if (this.checkPermissions(sender, 3)) {
+				this.onSpawnSetRequest(sender);
+			} else {
+				sender.sendMessage(this.lang.get("noPermissions"));
+			}
+
+			return true;
+		}
+
+		if (args[0].equalsIgnoreCase("delete")) {
+			if (this.checkPermissions(sender, 3)) {
+				if (args.length == 2) {
+					this.onCubeDeletionRequest(sender, args[1]);
+				} else {
+					sender.sendMessage(ChatColor.RED + "Use /dc delete <name>");
+				}
+			} else {
+				sender.sendMessage(this.lang.get("noPermissions"));
+			}
+
+			return true;
+		}
+
+		if (args[0].equalsIgnoreCase("default")) {
+			if (this.checkPermissions(sender, 3)) {
+				if (args.length == 2) {
+					this.onCubeDefaultRequest(sender, args[1]);
+				} else if (args.length == 1) {
+					if (this.defaultDC != null) {
+						sender.sendMessage(ChatColor.GRAY + "Current default cube: " + ChatColor.GOLD + this.defaultDC.getName());
 					} else {
-						sender.sendMessage(this.lang.get("noPermissions"));
+						sender.sendMessage(ChatColor.GRAY + "Default cube not set!");
 					}
-				} else if (args[0].equalsIgnoreCase("pos")) {
-					if (this.checkPermissions(sender, 3)) {
-						if (sender instanceof Player) {
-							if (args.length == 2) {
-								this.onSetLocationRequest(sender, args[1]);
-							} else if (args.length == 1) {
-								this.onCheckPositionRequest(sender);
-							} else {
-								sender.sendMessage(ChatColor.RED + "Wrong usage. Use /dc pos 1|2");
-							}
-						} else {
-							sender.sendMessage(ChatColor.RED + "This command need to be run by a player!");
-						}
-					} else {
-						sender.sendMessage(this.lang.get("noPermissions"));
-					}
-				} else if (!args[0].equalsIgnoreCase("new") && !args[0].equalsIgnoreCase("n")) {
-					if (args[0].equalsIgnoreCase("set")) {
-						if (this.checkPermissions(sender, 2)) {
-							if (args.length == 3) {
-								this.onChangeConfigurationRequest(sender, args[1], args[2]);
-							} else {
-								sender.sendMessage(ChatColor.RED + "Wrong usage! Use /dc set <key> <value>");
-								sender.sendMessage(ChatColor.RED + "Use '_' for spaces in strings");
-							}
-						} else {
-							sender.sendMessage(this.lang.get("noPermissions"));
-						}
-					} else if (args[0].equalsIgnoreCase("get")) {
-						if (this.checkPermissions(sender, 2)) {
-							if (args.length == 2) {
-								this.onGetConfigurationRequest(sender, args[1]);
-							} else {
-								sender.sendMessage(ChatColor.GRAY + "Use /dc get <key>");
-							}
-						} else {
-							sender.sendMessage(this.lang.get("noPermissions"));
-						}
-					} else if (args[0].equalsIgnoreCase("open")) {
-						if (this.checkPermissions(sender, 2)) {
-							this.onOpenGateRequest(sender);
-						} else {
-							sender.sendMessage(this.lang.get("noPermissions"));
-						}
-					} else if (args[0].equalsIgnoreCase("tp")) {
-						if (this.checkPermissions(sender, 1)) {
-							if (args.length == 2) {
-								this.onTeleportationRequest(sender, false, args[1]);
-							} else {
-								this.onTeleportationRequest(sender, false, (String) null);
-							}
-						} else {
-							sender.sendMessage(this.lang.get("noPermissions"));
-						}
-					} else if (args[0].equalsIgnoreCase("tpi")) {
-						if (this.checkPermissions(sender, 1)) {
-							if (args.length == 2) {
-								this.onTeleportationRequest(sender, true, args[1]);
-							} else {
-								this.onTeleportationRequest(sender, true, (String) null);
-							}
-						} else {
-							sender.sendMessage(this.lang.get("noPermissions"));
-						}
-					} else if (!args[0].equalsIgnoreCase("food") && !args[0].equalsIgnoreCase("f")) {
-						if (args[0].equalsIgnoreCase("list")) {
-							if (this.checkPermissions(sender, 1)) {
-								this.onListDeathCubesRequest(sender);
-							} else {
-								sender.sendMessage(this.lang.get("noPermissions"));
-							}
-						} else if (!args[0].equalsIgnoreCase("info") && !args[0].equalsIgnoreCase("i")) {
-							if (!args[0].equalsIgnoreCase("start") && !args[0].equalsIgnoreCase("s")) {
-								if (args[0].equalsIgnoreCase("stop")) {
-									if (this.checkPermissions(sender, 2)) {
-										this.onStopRequest(sender);
-									} else {
-										sender.sendMessage(this.lang.get("noPermissions"));
-									}
-								} else if (args[0].equalsIgnoreCase("spawn")) {
-									if (this.checkPermissions(sender, 3)) {
-										this.onSpawnSetRequest(sender);
-									} else {
-										sender.sendMessage(this.lang.get("noPermissions"));
-									}
-								} else if (args[0].equalsIgnoreCase("delete")) {
-									if (this.checkPermissions(sender, 3)) {
-										if (args.length == 2) {
-											this.onCubeDeletionRequest(sender, args[1]);
-										} else {
-											sender.sendMessage(ChatColor.RED + "Use /dc delete <name>");
-										}
-									} else {
-										sender.sendMessage(this.lang.get("noPermissions"));
-									}
-								} else if (args[0].equalsIgnoreCase("default")) {
-									if (this.checkPermissions(sender, 3)) {
-										if (args.length == 2) {
-											this.onCubeDefaultRequest(sender, args[1]);
-										} else if (args.length == 1) {
-											if (this.defaultDC != null) {
-												sender.sendMessage(ChatColor.GRAY + "Current default cube: " + ChatColor.GOLD + this.defaultDC.getName());
-											} else {
-												sender.sendMessage(ChatColor.GRAY + "Default cube not set!");
-											}
-										} else {
-											sender.sendMessage(ChatColor.RED + "Use /dc default <name>");
-										}
-									} else {
-										sender.sendMessage(this.lang.get("noPermissions"));
-									}
-								} else if (!args[0].equalsIgnoreCase("bar") && !args[0].equalsIgnoreCase("b")) {
-									if (!args[0].equalsIgnoreCase("leave") && !args[0].equalsIgnoreCase("l")) {
-										if (!args[0].equalsIgnoreCase("help") && !args[0].equalsIgnoreCase("h")) {
-											if (args[0].equalsIgnoreCase("burn")) {
-												if (this.checkPermissions(sender, 2)) {
-													if (args.length == 2 && args[1].equalsIgnoreCase("stop")) {
-														this.onBurnStopRequest(sender);
-													} else {
-														this.onBurnRequest(sender);
-													}
-												} else {
-													sender.sendMessage(this.lang.get("noPermissions"));
-												}
-											} else if (args[0].equalsIgnoreCase("clear")) {
-												if (this.checkPermissions(sender, 2)) {
-													this.onCubeClearRequest(sender);
-												} else {
-													sender.sendMessage(this.lang.get("noPermissions"));
-												}
-											} else if (!args[0].equalsIgnoreCase("timer") && !args[0].equalsIgnoreCase("t")) {
-												sender.sendMessage(ChatColor.RED + "Unknown Command. Try /dc help");
-											} else if (this.checkPermissions(sender, 1)) {
-												this.onGetTimerRequest(sender);
-											} else {
-												sender.sendMessage(this.lang.get("noPermissions"));
-											}
-										} else if (args.length == 1) {
-											this.onHelpRequest(sender, (String) null);
-										} else {
-											this.onHelpRequest(sender, args[1]);
-										}
-									} else if (this.checkPermissions(sender, 1)) {
-										this.onCubeOutRequest(sender);
-									} else {
-										sender.sendMessage(this.lang.get("noPermissions"));
-									}
-								} else if (args.length == 2 && (args[1].startsWith("l") || args[1].startsWith("r"))) {
-									if (this.checkPermissions(sender, 2)) {
-										this.onBlockbarReloadRequest(sender);
-									} else {
-										sender.sendMessage(this.lang.get("noPermissions"));
-									}
-								} else if (args.length == 1) {
-									if (this.checkPermissions(sender, 3)) {
-										this.onBlockbarSetRequest(sender);
-									} else {
-										sender.sendMessage(this.lang.get("noPermissions"));
-									}
-								} else {
-									sender.sendMessage(ChatColor.RED + "Wrong Usage: /dc bar [l/r]");
-								}
-							} else if (!this.checkPermissions(sender, 2) && !sender.hasPermission("deathcube.start")) {
-								sender.sendMessage(this.lang.get("noPermissions"));
-							} else if (args.length == 2) {
-								this.onStartRequest(sender, args[1]);
-							} else {
-								this.onStartRequest(sender, (String) null);
-							}
-						} else {
-							sender.sendMessage(ChatColor.GREEN + "This server is running DeathCube " + this.version + "!");
-						}
-					} else if (this.checkPermissions(sender, 1)) {
-						this.onPlayerWantsFood(sender);
-					} else {
-						sender.sendMessage(this.lang.get("noPermissions"));
-					}
-				} else if (this.checkPermissions(sender, 2)) {
-					this.onCubeRenewRequest(sender);
+				} else {
+					sender.sendMessage(ChatColor.RED + "Use /dc default <name>");
+				}
+			} else {
+				sender.sendMessage(this.lang.get("noPermissions"));
+			}
+
+			return true;
+		}
+
+		if (args[0].equalsIgnoreCase("bar") || args[0].equalsIgnoreCase("b")) {
+			if (args.length == 2 && (args[1].startsWith("l") || args[1].startsWith("r"))) {
+				if (this.checkPermissions(sender, 2)) {
+					this.onBlockbarReloadRequest(sender);
+				} else {
+					sender.sendMessage(this.lang.get("noPermissions"));
+				}
+			} else if (args.length == 1) {
+				if (this.checkPermissions(sender, 3)) {
+					this.onBlockbarSetRequest(sender);
 				} else {
 					sender.sendMessage(this.lang.get("noPermissions"));
 				}
 			} else {
-				sender.sendMessage(ChatColor.RED + "Try /dc help");
+				sender.sendMessage(ChatColor.RED + "Wrong Usage: /dc bar [l/r]");
 			}
+
+			return true;
 		}
 
+		if (args[0].equalsIgnoreCase("leave") || args[0].equalsIgnoreCase("l")) {
+			if (this.checkPermissions(sender, 1)) {
+				this.onCubeOutRequest(sender);
+			} else {
+				sender.sendMessage(this.lang.get("noPermissions"));
+			}
+
+			return true;
+		}
+
+		if (args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("h")) {
+			if (args.length == 1) {
+				this.onHelpRequest(sender, (String) null);
+			} else {
+				this.onHelpRequest(sender, args[1]);
+			}
+
+			return true;
+		}
+
+		if (args[0].equalsIgnoreCase("burn")) {
+			if (this.checkPermissions(sender, 2)) {
+				if (args.length == 2 && args[1].equalsIgnoreCase("stop")) {
+					this.onBurnStopRequest(sender);
+				} else {
+					this.onBurnRequest(sender);
+				}
+			} else {
+				sender.sendMessage(this.lang.get("noPermissions"));
+			}
+
+			return true;
+		}
+
+		if (args[0].equalsIgnoreCase("clear")) {
+			if (this.checkPermissions(sender, 2)) {
+				this.onCubeClearRequest(sender);
+			} else {
+				sender.sendMessage(this.lang.get("noPermissions"));
+			}
+
+			return true;
+		}
+
+		if (args[0].equalsIgnoreCase("timer") || args[0].equalsIgnoreCase("t")) {
+			if (this.checkPermissions(sender, 1)) {
+				this.onGetTimerRequest(sender);
+			} else {
+				sender.sendMessage(this.lang.get("noPermissions"));
+			}
+
+			return true;
+		}
+
+		sender.sendMessage(ChatColor.RED + "Unknown Command. Try /dc help");
 		return true;
 	}
 
