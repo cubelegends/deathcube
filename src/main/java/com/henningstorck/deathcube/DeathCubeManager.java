@@ -179,8 +179,6 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
 												} else {
 													sender.sendMessage(this.lang.get("noPermissions"));
 												}
-											} else if (args[0].equalsIgnoreCase("baba")) {
-												this.onBabaIsHere(sender);
 											} else if (args[0].equalsIgnoreCase("clear")) {
 												if (this.checkPermissions(sender, 2)) {
 													this.onCubeClearRequest(sender);
@@ -254,16 +252,6 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
 			sender.sendMessage(ChatColor.GREEN + "Cube was destroyed from " + dc.startHeight + " to 255");
 		} else {
 			sender.sendMessage(ChatColor.RED + "Select a DeathCube first using /dc select");
-		}
-
-	}
-
-	private void onBabaIsHere(CommandSender sender) {
-		if (sender instanceof Player && this.getServer().getOnlineMode()) {
-			Player p = (Player) sender;
-			if (p.getName().equals("baba43")) {
-				this.getServer().broadcastMessage(ChatColor.GRAY + "DC: Hello Baba! :)");
-			}
 		}
 
 	}
