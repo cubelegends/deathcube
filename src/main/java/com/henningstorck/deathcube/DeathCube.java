@@ -1,6 +1,8 @@
 package com.henningstorck.deathcube;
 
 import org.bukkit.*;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -726,6 +728,8 @@ public class DeathCube {
 				if (i >= mitteX - (this.stageWidth - 1) && i <= mitteX + this.stageWidth) {
 					w.getBlockAt(i, height, minZ).setType(Material.GLASS_PANE);
 					w.getBlockAt(i, height, maxZ).setType(Material.GLASS_PANE);
+					w.getBlockAt(i, height, minZ).setBlockData(this.connectGlassPanes((MultipleFacing) w.getBlockAt(i, height, minZ).getBlockData(), false));
+					w.getBlockAt(i, height, maxZ).setBlockData(this.connectGlassPanes((MultipleFacing) w.getBlockAt(i, height, maxZ).getBlockData(), false));
 				} else {
 					w.getBlockAt(i, height, minZ).setType(Material.GLASS);
 					w.getBlockAt(i, height, maxZ).setType(Material.GLASS);
@@ -739,6 +743,8 @@ public class DeathCube {
 				if (e >= mitteZ - (this.stageWidth - 1) && e <= mitteZ + this.stageWidth) {
 					w.getBlockAt(minX, height, e).setType(Material.GLASS_PANE);
 					w.getBlockAt(maxX, height, e).setType(Material.GLASS_PANE);
+					w.getBlockAt(minX, height, e).setBlockData(this.connectGlassPanes((MultipleFacing) w.getBlockAt(minX, height, e).getBlockData(), true));
+					w.getBlockAt(maxX, height, e).setBlockData(this.connectGlassPanes((MultipleFacing) w.getBlockAt(maxX, height, e).getBlockData(), true));
 				} else {
 					w.getBlockAt(minX, height, e).setType(Material.GLASS);
 					w.getBlockAt(maxX, height, e).setType(Material.GLASS);
@@ -746,6 +752,14 @@ public class DeathCube {
 			}
 		}
 
+	}
+
+	private MultipleFacing connectGlassPanes(final MultipleFacing multipleFacing, final boolean northToSouth) {
+		multipleFacing.setFace(BlockFace.NORTH, northToSouth);
+		multipleFacing.setFace(BlockFace.EAST, !northToSouth);
+		multipleFacing.setFace(BlockFace.SOUTH, northToSouth);
+		multipleFacing.setFace(BlockFace.WEST, !northToSouth);
+		return multipleFacing;
 	}
 
 	public void destroyTunnel() {
