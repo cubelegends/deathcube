@@ -20,9 +20,8 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
-import java.io.*;
-import java.net.URL;
-import java.net.URLConnection;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 public class DeathCubeManager extends JavaPlugin implements Listener {
@@ -34,15 +33,10 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
 	private String version = "v3.0.0-SNAPSHOT";
 	private ArrayList<String> allowedCommands = new ArrayList();
 	private DeathCube defaultDC;
-	private boolean upToDate = true;
-	private boolean notUpdated = false;
 
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		if (cmd.getName().equalsIgnoreCase("dc")) {
-			if (this.notUpdated) {
-				this.newVersionNotification(sender);
-				sender.sendMessage(ChatColor.GRAY + "Command was not executed!");
-			} else if (args.length > 0) {
+			if (args.length > 0) {
 				if (args[0].equalsIgnoreCase("create")) {
 					if (this.checkPermissions(sender, 3)) {
 						this.onCubeCreationRequest(sender);
@@ -236,11 +230,6 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
 							}
 						} else {
 							sender.sendMessage(ChatColor.GREEN + "This server is running DeathCube " + this.version + "!");
-							if (!this.upToDate) {
-								sender.sendMessage(ChatColor.GRAY + "Your DeathCube version is outdated, please update!");
-								sender.sendMessage(ChatColor.GRAY + "Enable autoUpdate and restart or follow this link:");
-								sender.sendMessage(ChatColor.GREEN + "http://dev.bukkit.org/server-mods/deathcube");
-							}
 						}
 					} else if (this.checkPermissions(sender, 1)) {
 						this.onPlayerWantsFood(sender);
@@ -289,13 +278,6 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
 
 	public boolean checkPermissions(CommandSender sender, int level) {
 		return !sender.hasPermission("deathcube.admin") && !sender.isOp() ? (sender.hasPermission("deathcube.mod") && level < 3 ? true : level == 1 && sender.hasPermission("deathcube.use")) : true;
-	}
-
-	public void newVersionNotification(CommandSender sender) {
-		sender.sendMessage(ChatColor.GRAY + "Important " + ChatColor.GOLD + "notification" + ChatColor.GRAY + ": DeathCube has updated itself to a new version! The config system changed, so you need to recreate your DeathCube and delete your old " + ChatColor.GREEN + "config.yml" + ChatColor.GRAY + ". For safety reasons a placeholder was created that should protect your old DeathCube area.");
-		sender.sendMessage("" + ChatColor.GRAY);
-		sender.sendMessage(ChatColor.GRAY + "Since commands have changed as well it's highly recommended to read my new instructions by following this link:");
-		sender.sendMessage(ChatColor.GREEN + "http://dev.bukkit.org/server-mods/deathcube");
 	}
 
 	private DeathCube findDeathCubeByString(String name) {
@@ -564,10 +546,6 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
 								}
 
 								dc.tpIn(p);
-								if (!this.upToDate) {
-									p.sendMessage(ChatColor.GRAY + "A new version is available. Type " + ChatColor.GOLD + "/dc i");
-								}
-
 								return true;
 							}
 
@@ -578,10 +556,6 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
 									}
 
 									dc.tpIn(p);
-									if (!this.upToDate) {
-										p.sendMessage(ChatColor.GRAY + "Please update DeathCube. Type /dc i");
-									}
-
 									return true;
 								}
 
@@ -1315,19 +1289,6 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
 
 	}
 
-	private void onDownloadRequest(final CommandSender sender) {
-		this.getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
-			public void run() {
-				if (DeathCubeManager.this.downloadFile("http://google.de", "plugins/DeathCube.jar", sender)) {
-					sender.sendMessage(ChatColor.GREEN + "Download finished.");
-				} else {
-					sender.sendMessage(ChatColor.RED + "Download failed.");
-				}
-
-			}
-		});
-	}
-
 	@EventHandler
 	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
 		Iterator var3 = this.cubeNames.values().iterator();
@@ -1713,7 +1674,6 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
 	private void loadDeathCubes() {
 		DeathCube dct;
 		if (this.config.contains("pos")) {
-			this.notUpdated = true;
 			World dc = this.getServer().getWorld(UUID.fromString(this.config.getString("pos.world")));
 			if (dc != null) {
 				Location s = new Location(dc, (double) this.config.getInt("pos.1.x"), (double) this.config.getInt("pos.1.y"), (double) this.config.getInt("pos.1.z"));
@@ -1742,10 +1702,6 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
 			this.allowedCommands.add(var7);
 		}
 
-		if (!this.config.contains("global.autoUpdate")) {
-			this.config.set("global.autoUpdate", true);
-		}
-
 		if (this.config.contains("cubes")) {
 			Iterator var9 = this.config.getConfigurationSection("cubes").getKeys(false).iterator();
 
@@ -1758,7 +1714,6 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
 		}
 
 		this.saveConfig();
-		this.checkVersion();
 	}
 
 	private void loadConfig(DeathCube dc) {
@@ -1963,111 +1918,6 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
 			this.config.save(this.configPath);
 		} catch (IOException var2) {
 			System.out.println("Unknown Exception while saving config File!");
-		}
-
-	}
-
-	private boolean downloadFile(String link, String localFile, CommandSender sender) {
-		try {
-			URL e = new URL(link);
-			URLConnection conn = e.openConnection();
-			BufferedInputStream is = new BufferedInputStream(conn.getInputStream());
-			BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(localFile));
-			byte[] chunk = new byte[1024];
-
-			int chunkSize;
-			while ((chunkSize = is.read(chunk)) != -1) {
-				os.write(chunk, 0, chunkSize);
-			}
-
-			os.flush();
-			os.close();
-			is.close();
-			return true;
-		} catch (IOException var10) {
-			this.o("Error while downloading File!");
-			return false;
-		}
-	}
-
-	private void checkVersion() {
-		this.getServer().getScheduler().scheduleAsyncDelayedTask(this, new Runnable() {
-			public void run() {
-				try {
-					URL e1 = new URL("http://dev.bukkit.org/server-mods/deathcube/files/");
-					URLConnection yc = e1.openConnection();
-					BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
-					String inputLine = "";
-
-					label39:
-					while ((inputLine = in.readLine()) != null) {
-						if (inputLine.contains("col-file\"")) {
-							String link = inputLine.split("deathcube/files/")[1].split("/")[0];
-							String newestVersion = inputLine.split("DeathCube ")[1].split("<")[0];
-							link = "http://dev.bukkit.org/server-mods/deathcube/files/" + link + "/";
-							if (!newestVersion.equals(DeathCubeManager.this.version)) {
-								DeathCubeManager.this.upToDate = false;
-								System.out.println("DeathCube is not UpToDate. Please update!");
-								if (!DeathCubeManager.this.config.getBoolean("global.autoUpdate")) {
-									break;
-								}
-
-								if ((new File("plugins/DeathCube.jar.new")).exists()) {
-									DeathCubeManager.this.o("Please rename \"DeathCube.jar.new\" to \"DeathCube.jar\"");
-									break;
-								}
-
-								e1 = new URL(link);
-								yc = e1.openConnection();
-								in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
-
-								do {
-									if ((inputLine = in.readLine()) == null) {
-										break label39;
-									}
-								} while (!inputLine.contains("media/files/"));
-
-								String downloadLink = inputLine.split("http://dev.bukkit.org/media/files/")[1].split("/DeathCube")[0];
-								downloadLink = "http://dev.bukkit.org/media/files/" + downloadLink + "/DeathCube.jar";
-								DeathCubeManager.this.fileDownload(downloadLink, "plugins/DeathCube.jar");
-								DeathCubeManager.this.o("Version " + newestVersion + " downloaded!");
-								break;
-							}
-
-							DeathCubeManager.this.upToDate = true;
-							System.out.println("DeathCube is UpToDate!");
-							break;
-						}
-					}
-
-					in.close();
-				} catch (IOException var8) {
-					System.out.println("Unkown error while looking for updates.");
-				}
-
-			}
-		}, 10L);
-	}
-
-	private void fileDownload(String link, String localFile) {
-		try {
-			URL e = new URL(link);
-			URLConnection conn = e.openConnection();
-			BufferedInputStream is = new BufferedInputStream(conn.getInputStream());
-			BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(localFile));
-			byte[] chunk = new byte[1024];
-
-			int chunkSize;
-			while ((chunkSize = is.read(chunk)) != -1) {
-				os.write(chunk, 0, chunkSize);
-			}
-
-			os.flush();
-			os.close();
-			is.close();
-		} catch (IOException var9) {
-			this.o("Error while downloading! Try it manually.");
-			var9.printStackTrace();
 		}
 
 	}
