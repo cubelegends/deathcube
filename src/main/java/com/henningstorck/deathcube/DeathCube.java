@@ -50,7 +50,6 @@ public class DeathCube {
 	public int mTimedMinPlayers;
 	public int mPublicMinPlayers;
 	public long posTowerRate;
-	public boolean advertiseTournament;
 	public boolean activeRedstone;
 	public boolean looseOnFall;
 	public boolean userStart;
@@ -205,11 +204,6 @@ public class DeathCube {
 			if (this.world.getBlockAt(target.getBlockX(), target.getBlockY() - 1, target.getBlockZ()).getType() != Material.AIR) {
 				p.setNoDamageTicks(20);
 				p.teleport(target);
-				if (this.advertiseTournament) {
-					p.sendMessage(ChatColor.GREEN + "You think you are good and want to fight for some prices? ");
-					p.sendMessage(ChatColor.GREEN + "Check " + ChatColor.GOLD + "/dc h t" + ChatColor.GREEN + " for our upcoming tournament!");
-				}
-
 				p.sendMessage(this.plugin.lang.get("tpInHello"));
 				return true;
 			}

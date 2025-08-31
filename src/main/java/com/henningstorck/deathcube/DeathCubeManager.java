@@ -1242,7 +1242,7 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
 							var7 = var6[var4];
 							sender.sendMessage(var7);
 						}
-					} else if (!submenu.equalsIgnoreCase("tournament") && !submenu.equalsIgnoreCase("t")) {
+					} else {
 						if (!submenu.equalsIgnoreCase("r") && !submenu.equalsIgnoreCase("rules")) {
 							sender.sendMessage(ChatColor.GRAY + "Info page not found. Try " + ChatColor.GOLD + "info, commands or rules");
 						} else {
@@ -1271,10 +1271,6 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
 								sender.sendMessage(ChatColor.GRAY + "Could not find a selected cube. Use" + ChatColor.GOLD + "/dc select <name> or /dc list");
 							}
 						}
-					} else {
-						sender.sendMessage(ChatColor.AQUA + "First of all: Our first official deathcube tournament is for german players only, because we want to limit the number of participants. The next tournament will be international, so keep up your training ;)");
-						sender.sendMessage("" + ChatColor.AQUA);
-						sender.sendMessage(ChatColor.GREEN + "Bei unserem ersten offiziellen DeathCube Turnier kaempfen 3-5 Spieler pro Team um Geld, Serverpakete und iPods! Interesse geweckt? Auf " + ChatColor.GOLD + "deathcube.minebench.de" + ChatColor.GREEN + " erfaehrst du, wie du teilnehmen kannst.");
 					}
 				} else {
 					sender.sendMessage(this.lang.get("helpInfo"));
@@ -1840,7 +1836,6 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
 		dc.dropProtection = this.getInt(path + "dropProtection", 5);
 		dc.looseOnFall = this.getBoolean(path + "looseOnFall", false);
 		dc.activeRedstone = this.getBoolean(path + "activeRedstone", false);
-		dc.advertiseTournament = this.getBoolean(path + "advertiseTournament", true);
 		dc.stageWidth = this.getInt(path + "stageWidth", 1);
 		this.loadWinCommands(path + "winCommands", dc.winCommands);
 		dc.mTimedMinPlayers = this.getInt(path + "mTimedMinPlayers", 1);
