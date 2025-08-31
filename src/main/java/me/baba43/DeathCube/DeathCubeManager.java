@@ -30,7 +30,7 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
 	private File configPath = new File("plugins/DeathCube/config.yml");
 	private FileConfiguration config;
 	public Language lang;
-	private String version = "v2.53";
+	private String version = "v3.0.0-SNAPSHOT";
 	private ArrayList<String> allowedCommands = new ArrayList();
 	private DeathCube defaultDC;
 	private boolean upToDate = true;

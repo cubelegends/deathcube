@@ -1,6 +1,6 @@
 name: DeathCube
-version: 2.5
-description: DeathCube v2.5
+version: 3.0.0-SNAPSHOT
+description: DeathCube v3.0.0-SNAPSHOT
 author: henningstorck
 main: me.baba43.DeathCube.DeathCubeManager
 softdepend: [ 'Multiverse-Core' ]
