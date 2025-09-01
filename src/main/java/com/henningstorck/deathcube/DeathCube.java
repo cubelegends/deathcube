@@ -80,11 +80,13 @@ public class DeathCube {
 	public ArrayList<String> pWinCommands = new ArrayList();
 	public ArrayList<String> tWinCommands = new ArrayList();
 	private ArrayList<Integer> burnLevels = new ArrayList();
+	private ScoreboardConnector scoreboardConnector;
 
 	public DeathCube(String name, DeathCubeManager plugin) {
 		this.name = name;
 		this.plugin = plugin;
 		this.gm = new GameManager(this);
+		this.scoreboardConnector = new ScoreboardConnector(this);
 	}
 
 	public void setBlockBar(BlockBar bb) {
@@ -160,6 +162,7 @@ public class DeathCube {
 			this.buildCube((CommandSender) null);
 		}
 
+		this.scoreboardConnector.clear();
 	}
 
 	private String elapsedTimeToString(long time) {
@@ -391,6 +394,7 @@ public class DeathCube {
 
 				if (this.contains(p, -1) && !this.contains(p, -4) && this.controlPlayer(message)) {
 					this.activePlayers.add(message);
+					this.scoreboardConnector.addPlayer(message);
 					message.sendMessage(this.plugin.lang.get("privateStart"));
 				}
 			}
@@ -830,5 +834,9 @@ public class DeathCube {
 	private int random(int from, int to) {
 		++to;
 		return (int) (Math.random() * (double) (to - from) + (double) from);
+	}
+
+	public void updateScore(Player player) {
+		this.scoreboardConnector.updateScore(player);
 	}
 }

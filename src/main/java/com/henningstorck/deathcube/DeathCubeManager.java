@@ -1492,13 +1492,17 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
 							dc.playerLeft(p, this.lang.get("leaveAreaA"), this.lang.get("leaveAreaP"));
 							dc.tpToSpawn(p);
 						}
-					} else if (dc.looseOnFall && p.getLocation().getBlockY() <= dc.startHeight - 1) {
-						dc.playerLeft(p, this.lang.get("leaveFallA"), this.lang.get("leaveFallA"));
-						dc.tpToSpawn(p);
-					} else if (!dc.isBurned && p.getLocation().getBlockY() >= dc.burnLevel && dc.burnLevel >= dc.stageLevel + 1 && dc.burnLevel <= dc.height) {
-						dc.playerReachedBurnLimit(p);
-					} else if (p.getLocation().getBlockY() >= dc.height + 1) {
-						dc.playerReachedTop(p);
+					} else {
+						dc.updateScore(p);
+
+						if (dc.looseOnFall && p.getLocation().getBlockY() <= dc.startHeight - 1) {
+							dc.playerLeft(p, this.lang.get("leaveFallA"), this.lang.get("leaveFallA"));
+							dc.tpToSpawn(p);
+						} else if (!dc.isBurned && p.getLocation().getBlockY() >= dc.burnLevel && dc.burnLevel >= dc.stageLevel + 1 && dc.burnLevel <= dc.height) {
+							dc.playerReachedBurnLimit(p);
+						} else if (p.getLocation().getBlockY() >= dc.height + 1) {
+							dc.playerReachedTop(p);
+						}
 					}
 					break;
 				}
