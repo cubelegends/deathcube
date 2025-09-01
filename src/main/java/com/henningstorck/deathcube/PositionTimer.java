@@ -117,13 +117,4 @@ public class PositionTimer implements Runnable {
 	private void setInactive(Block b) {
 		b.setType(Material.AIR);
 	}
-
-	private void setBlock(Block b, boolean active) {
-		if (active) {
-			b.setType(Material.DIRT);
-		} else {
-			b.setType(Material.AIR);
-		}
-
-	}
 }

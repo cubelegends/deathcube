@@ -2005,15 +2005,6 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
 		return (int) (Math.random() * (double) (to - from) + (double) from);
 	}
 
-	private boolean isNumber(String s) {
-		try {
-			Integer.parseInt(s);
-			return true;
-		} catch (NumberFormatException var3) {
-			return false;
-		}
-	}
-
 	private void o(String text) {
 		System.out.println("DC: " + text);
 	}

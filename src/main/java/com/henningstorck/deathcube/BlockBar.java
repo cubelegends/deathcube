@@ -17,10 +17,8 @@ public class BlockBar {
 	private Vector vector;
 	private final Material[] fixedBlocks = new Material[]{Material.YELLOW_WOOL, Material.BLUE_WOOL, Material.RED_WOOL};
 	private int minX;
-	private int minY;
 	private int minZ;
 	private int maxX;
-	private int maxY;
 	private int maxZ;
 	private Block floorBlock;
 
@@ -77,7 +75,6 @@ public class BlockBar {
 			this.minZ = Math.min(this.origin.getBlockZ(), var7.getBlockZ());
 			this.maxX = Math.max(this.origin.getBlockX(), var7.getBlockX());
 			this.maxZ = Math.max(this.origin.getBlockZ(), var7.getBlockZ());
-			this.minY = this.origin.getBlockY();
 			this.isSet = true;
 			if (sender != null) {
 				sender.sendMessage(ChatColor.GREEN + "Blockbar seems valid!");
@@ -132,10 +129,6 @@ public class BlockBar {
 			this.isSet = false;
 		}
 
-	}
-
-	public boolean isSet() {
-		return this.isSet;
 	}
 
 	private int random(int from, int to) {

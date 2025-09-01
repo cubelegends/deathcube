@@ -10,13 +10,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class Language {
-	private File langYML = new File("plugins/DeathCube/language.yml");
 	private FileConfiguration language;
 	private File confFile;
-	private DeathCubeManager plugin;
 
 	public Language(DeathCubeManager plugin) {
-		this.plugin = plugin;
 		this.confFile = new File(plugin.getDataFolder(), "language.yml");
 		this.language = YamlConfiguration.loadConfiguration(this.confFile);
 		this.load();

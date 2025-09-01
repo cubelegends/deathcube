@@ -5,7 +5,6 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -55,7 +54,6 @@ public class DeathCube {
 	public boolean userStart;
 	public boolean posTower;
 	public boolean kickOnCheat;
-	public boolean broadcastGames;
 	public boolean broadcast;
 	public boolean isOpened;
 	public boolean offlineFeed;
@@ -95,9 +93,6 @@ public class DeathCube {
 
 	public BlockBar getBlockBar() {
 		return this.bb;
-	}
-
-	public void saveSettings(FileConfiguration config) {
 	}
 
 	public String getName() {
@@ -167,7 +162,6 @@ public class DeathCube {
 
 	private String elapsedTimeToString(long time) {
 		int minutes = 0;
-		boolean seconds = false;
 
 		for (time /= 1000L; time > 60L && minutes < 61; time -= 60L) {
 			++minutes;
@@ -219,9 +213,6 @@ public class DeathCube {
 		return false;
 	}
 
-	public void stopBurning() {
-	}
-
 	public void playerReachedBurnLimit(Player p) {
 		if (p != null) {
 			this.broadcast(this.gl("reachedLimit").replaceFirst("%name%", p.getName()).replaceFirst("%level%", "" + this.burnLevel));
@@ -252,10 +243,6 @@ public class DeathCube {
 			this.destroyTunnel();
 		}
 
-	}
-
-	public void startGame(Player mod) {
-		this.startGame();
 	}
 
 	private boolean controlPlayer(Player p) {
@@ -440,9 +427,6 @@ public class DeathCube {
 
 	}
 
-	private void broadcastServer(String text) {
-	}
-
 	public void openGates() {
 		this.isOpened = true;
 		int mitteX = this.minX + (this.maxX - this.minX) / 2 - (this.stageWidth - 1);
@@ -605,23 +589,8 @@ public class DeathCube {
 		return loc.getWorld() == this.pos1.getWorld() && loc.getBlockX() >= this.minX - variance && loc.getBlockX() <= this.maxX + variance && loc.getBlockZ() >= this.minZ - variance && loc.getBlockZ() <= this.maxZ + variance;
 	}
 
-	public boolean contains(Location loc, int variance, int from, int to) {
-		return loc.getWorld() == this.pos1.getWorld() && loc.getBlockX() >= this.minX - variance && loc.getBlockX() <= this.maxX + variance && loc.getBlockZ() >= this.minZ - variance && loc.getBlockZ() <= this.maxZ + variance && loc.getBlockY() >= from - variance && loc.getBlockY() <= to + variance;
-	}
-
 	public boolean isActive(Player p) {
 		return this.gameRunning ? this.activePlayers.contains(p) : false;
-	}
-
-	public void clearCube() {
-		for (int h = this.startHeight; h <= 255; ++h) {
-			for (int i = this.minX + 5; i < this.maxX - 4; ++i) {
-				for (int e = this.minZ + 5; e < this.maxZ - 4; ++e) {
-					this.world.getBlockAt(i, h, e).setType(Material.AIR);
-				}
-			}
-		}
-
 	}
 
 	public void destroyCube() {
@@ -647,7 +616,6 @@ public class DeathCube {
 		this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, new Runnable() {
 			public void run() {
 				long start = (new Date()).getTime();
-				boolean pkin = DeathCube.this.pkinProbability != 0;
 
 				for (int now = DeathCube.this.startHeight; now <= cubeHeight; ++now) {
 					for (int i = minX + 5; i < maxX - 4; ++i) {
@@ -821,10 +789,6 @@ public class DeathCube {
 			}
 		}
 
-	}
-
-	public void remove() {
-		this.gm.destroyAll();
 	}
 
 	private String gl(String key) {

@@ -13,8 +13,6 @@ import java.util.Iterator;
 public class GameManager {
 	private DeathCube dc;
 	private BukkitScheduler scheduler;
-	private int task;
-	private int regTask;
 	private long tempTime = 0L;
 	private boolean taskByUser;
 	private ArrayList<Integer> tempTimers = new ArrayList();
@@ -161,26 +159,8 @@ public class GameManager {
 
 	}
 
-	public void destroyAll() {
-		if (!this.tempTimers.isEmpty()) {
-			Iterator var2 = this.tempTimers.iterator();
-
-			while (var2.hasNext()) {
-				int id = (Integer) var2.next();
-				this.scheduler.cancelTask(id);
-			}
-		}
-
-		if (this.regTask != -1) {
-			this.scheduler.cancelTask(this.regTask);
-		}
-
-		this.tempTime = 0L;
-	}
-
 	private int[] getLeftTime(long time) {
 		int minutes = 0;
-		boolean seconds = false;
 
 		for (time /= 1000L; time > 60L && minutes < 61; time -= 60L) {
 			++minutes;
