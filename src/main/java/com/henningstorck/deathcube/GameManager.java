@@ -100,21 +100,13 @@ public class GameManager {
 			this.dc.buildTunnel();
 			this.dc.buildCube((CommandSender) null);
 			this.broadcastLocal(this.dc.getPlugin().lang.get("15sBroadcast").replace("%dcname%", this.dc.getName()));
-			timeTo15s = this.scheduler.scheduleSyncDelayedTask(this.dc.getPlugin(), new Runnable() {
-				public void run() {
-					GameManager.this.startTaskGame();
-				}
-			}, 300L);
+			timeTo15s = this.scheduler.scheduleSyncDelayedTask(this.dc.getPlugin(), GameManager.this::startTaskGame, 300L);
 		} else {
 			this.tempTime = (new Date()).getTime() + (long) (minutes * 60 * 1000);
 			int task1;
 			if (minutes > 10) {
 				timeTo15s = minutes - 10;
-				task1 = this.scheduler.scheduleSyncDelayedTask(this.dc.getPlugin(), new Runnable() {
-					public void run() {
-						GameManager.this.broadcast(GameManager.this.dc.getPlugin().lang.get("XmBroadcast").replace("%dcname%", GameManager.this.dc.getName()).replace("%minutes%", "10"));
-					}
-				}, (long) (timeTo15s * 20 * 60));
+				task1 = this.scheduler.scheduleSyncDelayedTask(this.dc.getPlugin(), () -> GameManager.this.broadcast(GameManager.this.dc.getPlugin().lang.get("XmBroadcast").replace("%dcname%", GameManager.this.dc.getName()).replace("%minutes%", "10")), (long) (timeTo15s * 20 * 60));
 				this.tempTimers.add(task1);
 			} else if (minutes == 10) {
 				this.broadcast(this.dc.getPlugin().lang.get("1mBroadcast").replace("%dcname%", this.dc.getName()).replace("%minutes%", "1"));
@@ -122,13 +114,11 @@ public class GameManager {
 
 			if (minutes > 1) {
 				timeTo15s = minutes - 1;
-				task1 = this.scheduler.scheduleSyncDelayedTask(this.dc.getPlugin(), new Runnable() {
-					public void run() {
-						if (!GameManager.this.dc.gameRunning) {
-							GameManager.this.broadcast(GameManager.this.dc.getPlugin().lang.get("XmBroadcast").replace("%dcname%", GameManager.this.dc.getName()).replace("%minutes%", "1"));
-						}
-
+				task1 = this.scheduler.scheduleSyncDelayedTask(this.dc.getPlugin(), () -> {
+					if (!GameManager.this.dc.gameRunning) {
+						GameManager.this.broadcast(GameManager.this.dc.getPlugin().lang.get("XmBroadcast").replace("%dcname%", GameManager.this.dc.getName()).replace("%minutes%", "1"));
 					}
+
 				}, (long) (timeTo15s * 20 * 60));
 				this.tempTimers.add(task1);
 			} else if (minutes == 1) {
@@ -136,24 +126,18 @@ public class GameManager {
 			}
 
 			timeTo15s = minutes * 60 - 15;
-			task1 = this.scheduler.scheduleSyncDelayedTask(this.dc.getPlugin(), new Runnable() {
-				public void run() {
-					if (!GameManager.this.dc.gameRunning) {
-						GameManager.this.dc.destroyTunnel();
-						GameManager.this.dc.buildTunnel();
-						GameManager.this.dc.buildCube((CommandSender) null);
-						GameManager.this.broadcastLocal(GameManager.this.dc.getPlugin().lang.get("15sBroadcast").replace("%dcname%", GameManager.this.dc.getName()));
-					}
-
+			task1 = this.scheduler.scheduleSyncDelayedTask(this.dc.getPlugin(), () -> {
+				if (!GameManager.this.dc.gameRunning) {
+					GameManager.this.dc.destroyTunnel();
+					GameManager.this.dc.buildTunnel();
+					GameManager.this.dc.buildCube((CommandSender) null);
+					GameManager.this.broadcastLocal(GameManager.this.dc.getPlugin().lang.get("15sBroadcast").replace("%dcname%", GameManager.this.dc.getName()));
 				}
+
 			}, (long) (timeTo15s * 20));
 			this.tempTimers.add(task1);
 			Long timeToStart = (long) (minutes * 60 * 20);
-			task1 = this.scheduler.scheduleSyncDelayedTask(this.dc.getPlugin(), new Runnable() {
-				public void run() {
-					GameManager.this.startTaskGame();
-				}
-			}, timeToStart);
+			task1 = this.scheduler.scheduleSyncDelayedTask(this.dc.getPlugin(), GameManager.this::startTaskGame, timeToStart);
 			this.tempTimers.add(task1);
 		}
 

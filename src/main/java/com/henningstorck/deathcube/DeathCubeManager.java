@@ -1546,11 +1546,7 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
 			final Player p = event.getPlayer();
 			if (dc.waiting.contains(p.getName())) {
 				dc.waiting.remove(p.getName());
-				this.getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
-					public void run() {
-						dc.tpToSpawn(p);
-					}
-				}, 10L);
+				this.getServer().getScheduler().scheduleSyncDelayedTask(this, () -> dc.tpToSpawn(p), 10L);
 			}
 		}
 
@@ -1564,11 +1560,9 @@ public class DeathCubeManager extends JavaPlugin implements Listener {
 			final DeathCube dc = (DeathCube) var3.next();
 			final Player p = event.getPlayer();
 			if (dc.hasCorrectLocation && dc.contains(p.getLocation(), -2)) {
-				this.getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
-					public void run() {
-						dc.tpToSpawn(p);
-						p.sendMessage(DeathCubeManager.this.lang.get("removeOnSpawn"));
-					}
+				this.getServer().getScheduler().scheduleSyncDelayedTask(this, () -> {
+					dc.tpToSpawn(p);
+					p.sendMessage(DeathCubeManager.this.lang.get("removeOnSpawn"));
 				}, 10L);
 				break;
 			}

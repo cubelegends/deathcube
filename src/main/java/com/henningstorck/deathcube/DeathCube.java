@@ -354,11 +354,7 @@ public class DeathCube {
 							}
 
 							if (this.timeLimit > 0) {
-								this.threadBurn = this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, new Runnable() {
-									public void run() {
-										DeathCube.this.timeLimitOver();
-									}
-								}, (long) (this.timeLimit * 60) * 20L);
+								this.threadBurn = this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, DeathCube.this::timeLimitOver, (long) (this.timeLimit * 60) * 20L);
 							}
 
 							if (this.threadID2 == -1) {
@@ -613,34 +609,32 @@ public class DeathCube {
 		final int maxZ = this.maxZ - 4;
 		this.bb.verifyBlocks();
 		this.removeEntities();
-		this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, new Runnable() {
-			public void run() {
-				long start = (new Date()).getTime();
+		this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, () -> {
+			long start = (new Date()).getTime();
 
-				for (int now = DeathCube.this.startHeight; now <= cubeHeight; ++now) {
-					for (int i = minX + 5; i < maxX - 4; ++i) {
-						for (int e = minZ + 5; e < maxZ - 4; ++e) {
-							if (DeathCube.this.random(0, DeathCube.this.density) == 0) {
-								if (DeathCube.this.pkinProbability != 0 && DeathCube.this.random(0, DeathCube.this.pkinProbability) == 0) {
-									w.getBlockAt(i, now, e).setType(Material.JACK_O_LANTERN, true);
-									// Todo: Set random facing
-								} else {
-									DeathCube.this.bb.setCubeBlock(w.getBlockAt(i, now, e));
-								}
+			for (int now = DeathCube.this.startHeight; now <= cubeHeight; ++now) {
+				for (int i = minX + 5; i < maxX - 4; ++i) {
+					for (int e = minZ + 5; e < maxZ - 4; ++e) {
+						if (DeathCube.this.random(0, DeathCube.this.density) == 0) {
+							if (DeathCube.this.pkinProbability != 0 && DeathCube.this.random(0, DeathCube.this.pkinProbability) == 0) {
+								w.getBlockAt(i, now, e).setType(Material.JACK_O_LANTERN, true);
+								// Todo: Set random facing
 							} else {
-								w.getBlockAt(i, now, e).setType(Material.AIR);
+								DeathCube.this.bb.setCubeBlock(w.getBlockAt(i, now, e));
 							}
+						} else {
+							w.getBlockAt(i, now, e).setType(Material.AIR);
 						}
 					}
 				}
-
-				if (sender != null) {
-					long var7 = (new Date()).getTime();
-					sender.sendMessage(ChatColor.GREEN + "Cube regenerated in " + ChatColor.GOLD + (var7 - start) + "ms" + ChatColor.GREEN + "!");
-				}
-
-				DeathCube.this.removeEntities();
 			}
+
+			if (sender != null) {
+				long var7 = (new Date()).getTime();
+				sender.sendMessage(ChatColor.GREEN + "Cube regenerated in " + ChatColor.GOLD + (var7 - start) + "ms" + ChatColor.GREEN + "!");
+			}
+
+			DeathCube.this.removeEntities();
 		});
 	}
 
