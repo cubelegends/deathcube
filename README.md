@@ -1,11 +1,11 @@
 # DeathCube
 
-This is a plugin for Spigot servers allowing you to play a mini game, called "DeathCube". The player must climb up a
+This is a plugin for Minecraft servers allowing you to play a mini game, called "DeathCube". The player must climb up a
 randomly generated cube with air in it. The one, who reaches the top first, wins. At the same time, the cube begins to
 burn from the bottom.
 
 The plugin was originally developed by [baba43](https://github.com/baba43). This is a decompiled version of the original
-plugin from 2016 which is made compatible with the newest Spigot version.
+plugin from 2016 which is made compatible with the newest Minecraft version.
 
 ![Screenshot](screenshot.png)
 
