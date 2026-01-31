@@ -1,6 +1,6 @@
 name: DeathCube
-version: 3.0.0-SNAPSHOT
-description: DeathCube v3.0.0-SNAPSHOT
+version: 3.0.0
+description: DeathCube v3.0.0
 author: henningstorck
 main: com.henningstorck.deathcube.DeathCubeManager
 softdepend: [ 'Multiverse-Core' ]
