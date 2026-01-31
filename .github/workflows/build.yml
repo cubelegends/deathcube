@@ -2,6 +2,8 @@ on:
   push:
     branches:
       - main
+    tags:
+      - v*.*.*
 
   pull_request:
     branches:
@@ -10,6 +12,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout project
@@ -23,3 +28,10 @@ jobs:
 
       - name: Build project
         run: mvn -B verify
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        if: github.ref_type == 'tag'
+        with:
+          files: target/*.jar
+          draft: true
